@@ -13,18 +13,13 @@ Window {
     RowLayout {
         id: boardWithAllElements
         anchors.fill: parent
-        width: parent.width
-        height: parent.height
-
 
         Rectangle {
             id: board
             objectName: "board"
-            width: parent.width
-            height: parent.height
             Layout.alignment: Qt.AlignTop
 
-            readonly property int squareSize: Math.min(parent.width, parent.height) / 8;
+            readonly property int squareSize: Math.min(parent.width, parent.height - buttonRotateBoard.height) / 8;
             property variant colorArray: ["floralwhite", "dimgrey"]
             signal boardRotated()
 
