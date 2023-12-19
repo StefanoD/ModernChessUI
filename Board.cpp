@@ -1,9 +1,11 @@
 #include "Board.h"
+#include "ModernChess/FenParsing.h"
 
 constexpr int numberSquares = 64;
 
 Board::Board(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+    m_gameState(ModernChess::FenParsing::FenParser(ModernChess::FenParsing::startPosition).parse())
 {
     m_squares.reserve(numberSquares);
     generateBoard();
@@ -28,11 +30,27 @@ void Board::generateBoard()
     m_squares.clear();
 
     // generate new board
-    for (int col = 0; col < 8; ++col)
+    for (int row = 0; row < 8; ++row)
     {
-        for (int row = 0; row < 8; ++row)
+        for (int col = 0; col < 8; ++col)
         {
-            m_squares.append(new SquareModel(getSquare(row, col), "/resources/white-king.svg", m_boardParent.get()));
+            const int rank = m_rotated ? (7-row) : row;
+            const int file = m_rotated ? (7-col) : col;
+            const ModernChess::Square square = ModernChess::BitBoardOperations::getSquare(rank, file);
+
+            ModernChess::Figure figureOnSquare = ModernChess::Figure::None;
+
+            // loop over all figures bitboards
+            for (ModernChess::Figure figure = ModernChess::WhitePawn; figure <= ModernChess::BlackKing; ++figure)
+            {
+                if (ModernChess::BitBoardOperations::isOccupied(m_gameState.board.bitboards[figure], square))
+                {
+                    figureOnSquare = figure;
+                    break;
+                }
+            }
+
+            m_squares.append(new SquareModel(getSquare(row, col), m_figureToResource[figureOnSquare], m_boardParent.get()));
         }
     }
 }
