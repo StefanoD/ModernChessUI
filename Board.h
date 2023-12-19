@@ -32,7 +32,7 @@ private:
     void generateBoard();
     [[nodiscard]] QString getSquare(int row, int column) const;
 
-    QMap<ModernChess::Figure, QString> m_figureToResource {
+    const QMap<ModernChess::Figure, QString> m_figureToResource {
         {ModernChess::Figure::WhiteKing, "/resources/white-king.svg"},
         {ModernChess::Figure::WhiteQueen, "/resources/white-queen.svg"},
         {ModernChess::Figure::WhiteBishop, "/resources/white-bishop.svg"},
