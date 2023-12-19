@@ -22,7 +22,7 @@ signals:
     void squaresChanged();
 
 private:
-    QObject *m_boardParent{};
+    std::unique_ptr<QObject> m_boardParent{};
     QVector<SquareModel*> m_squares;
     bool m_rotated{};
 

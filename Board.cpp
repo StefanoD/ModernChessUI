@@ -24,8 +24,7 @@ void Board::onRotate()
 void Board::generateBoard()
 {
     // clear old board by deleting old parent
-    delete m_boardParent;
-    m_boardParent = new QObject(this);
+    m_boardParent = std::make_unique<QObject>();
     m_squares.clear();
 
     // generate new board
@@ -33,7 +32,7 @@ void Board::generateBoard()
     {
         for (int row = 0; row < 8; ++row)
         {
-            m_squares.append(new SquareModel(getSquare(row, col), "/resources/white-king.svg", m_boardParent));
+            m_squares.append(new SquareModel(getSquare(row, col), "/resources/white-king.svg", m_boardParent.get()));
         }
     }
 }
