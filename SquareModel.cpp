@@ -2,6 +2,11 @@
 
 #include <utility>
 
+SquareModel::SquareModel(QObject *parent) : QObject{parent}
+{
+
+}
+
 SquareModel::SquareModel(QString square, QString imageSource, QObject *parent)
     : QObject{parent},
     m_square(std::move(square)),

@@ -12,6 +12,7 @@ class SquareModel : public QObject
     QML_ELEMENT
 
 public:
+    explicit SquareModel(QObject *parent = nullptr);
     explicit SquareModel(QString square, QString imageSource, QObject *parent = nullptr);
 
     QString square() const { return m_square; }

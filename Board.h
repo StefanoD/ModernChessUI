@@ -15,13 +15,16 @@ public:
 
     QQmlListProperty<SquareModel> squares();
 
+public slots:
+    void onRotate();
+
 signals:
     void squaresChanged();
 
 private:
     QObject *m_boardParent{};
     QVector<SquareModel*> m_squares;
-    bool m_flipped{};
+    bool m_rotated{};
 
     void generateBoard();
     [[nodiscard]] QString getSquare(int row, int column) const;

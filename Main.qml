@@ -8,68 +8,64 @@ Window {
     visible: true
     title: qsTr("Modern Chess")
     id: root
-    readonly property int squareSize: Math.min(width, height) / 8;
 
-
-    ListModel {
-            id: figures
-
-            ListElement { name: "a1"; imageSource: "/resources/white-rook.svg" }
-            ListElement { name: "a8"; imageSource: "/resources/white-rook.svg" }
-        }
 
     RowLayout {
+        id: boardWithAllElements
+        anchors.fill: parent
+        width: parent.width
+        height: parent.height
+
+
         Rectangle {
             id: board
+            objectName: "board"
+            width: parent.width
+            height: parent.height
             Layout.alignment: Qt.AlignTop
+
+            readonly property int squareSize: Math.min(parent.width, parent.height) / 8;
             property variant colorArray: ["floralwhite", "dimgrey"]
-            property bool flipped: false
+            signal boardRotated()
 
             Repeater {
-                model: 64
+                anchors.fill: parent
+                model: _board.squares
 
                 delegate: Rectangle {
                     required property int index
+                    required property string square
+                    required property string imageSource
 
                     property int row: Math.floor(index/8);
                     property int col: index % 8;
                     z: 0;
-                    x: col * squareSize
-                    y: (7 - row) * squareSize
-                    height: squareSize
-                    width: squareSize
+                    x: col * board.squareSize
+                    y: (7 - row) * board.squareSize
+                    height: board.squareSize
+                    width: board.squareSize
                     color: board.colorArray[(row+1+col) % 2]
                     Text {
                         id: field
-                        text: board.flipped ? String.fromCharCode('h'.charCodeAt(0) - col) + (8 - row) : String.fromCharCode('a'.charCodeAt(0) + col) + (row + 1)
+                        text: square
                     }
                     Image {
                         id: figure
-                        source: (field.text === "a1") ? "/resources/white-king.svg" : ""
+                        source: imageSource
                         antialiasing: true
                         anchors.fill: parent
                         anchors.margins: parent.width * 0.025
                     }
-
-                    /*MouseArea {
-                        anchors.fill: parent
-                        anchors.margins: parent.width * 0.025
-                        onClicked: {
-
-                        }
-                        onDragChanged: {
-                            figure.x = mouseX
-                            figure.y = mouseY
-                        }
-                    }*/
                 }
             }
         }
+
         Button {
+            id: buttonRotateBoard
             Layout.alignment: Qt.AlignBottom
             text: "Rotate"
             onClicked: {
-                board.flipped = !board.flipped
+                board.boardRotated()
             }
         }
     }

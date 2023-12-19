@@ -11,7 +11,14 @@ Board::Board(QObject *parent)
 
 QQmlListProperty<SquareModel> Board::squares()
 {
-    return QQmlListProperty(this, &m_squares);
+    return QQmlListProperty<SquareModel>{this, &m_squares };
+}
+
+void Board::onRotate()
+{
+    m_rotated = not m_rotated;
+    generateBoard();
+    emit squaresChanged();
 }
 
 void Board::generateBoard()
@@ -33,7 +40,7 @@ void Board::generateBoard()
 
 QString Board::getSquare(int row, int column) const
 {
-    if (m_flipped)
+    if (m_rotated)
     {
         return QString("%1%2").arg(QChar('h'- column), QString::number(8 - row));
     }
