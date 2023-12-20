@@ -3,21 +3,20 @@ import QtQml.Models
 import QtQuick.Controls
 import QtQuick.Layouts
 
-RowLayout {
+Item {
     id: boardWithAllElements
-    anchors.fill: parent
     width: parent.width
     height: parent.height
 
 
-    Rectangle {
+    Grid {
         id: board
         objectName: "board"
-        width: parent.width
-        height: parent.height
-        Layout.alignment: Qt.AlignTop
+        anchors.fill: parent
+        rows: 8
+        columns: 8
 
-        readonly property int squareSize: Math.min(parent.width, parent.height) / 8;
+        readonly property int squareSize: Math.min(width, height) / 8;
         property variant colorArray: ["floralwhite", "dimgrey"]
         signal boardRotated()
 
@@ -32,9 +31,6 @@ RowLayout {
 
                 property int row: Math.floor(index/8);
                 property int col: index % 8;
-                z: 0;
-                x: col * board.squareSize
-                y: (7 - row) * board.squareSize
                 height: board.squareSize
                 width: board.squareSize
                 color: board.colorArray[(row+1+col) % 2]

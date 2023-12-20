@@ -9,17 +9,22 @@ Window {
     title: qsTr("Modern Chess")
     id: root
 
+    color: "#888888";
 
-    RowLayout {
+    ColumnLayout {
         id: boardWithAllElements
         anchors.fill: parent
 
-        Rectangle {
+        Grid {
             id: board
             objectName: "board"
             Layout.alignment: Qt.AlignTop
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            rows: 8
+            columns: 8
 
-            readonly property int squareSize: Math.min(parent.width, parent.height - buttonRotateBoard.height) / 8;
+            readonly property int squareSize: Math.min(width, height) / 8;
             property variant colorArray: ["floralwhite", "dimgrey"]
             signal boardRotated()
 
@@ -34,9 +39,6 @@ Window {
 
                     property int row: Math.floor(index/8);
                     property int col: index % 8;
-                    z: 0;
-                    x: col * board.squareSize
-                    y: (7 - row) * board.squareSize
                     height: board.squareSize
                     width: board.squareSize
                     color: board.colorArray[(row+1+col) % 2]
