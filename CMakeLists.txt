@@ -23,8 +23,7 @@ qt_add_executable(appModernChessUI
 qt_add_qml_module(appModernChessUI
     URI ModernChessUI
     VERSION 1.0
-    QML_FILES Main.qml Board.qml
-    SOURCES BoardFactory.h BoardFactory.cpp
+    QML_FILES Main.qml
     SOURCES SquareModel.h SquareModel.cpp
     SOURCES Board.h Board.cpp
 )
