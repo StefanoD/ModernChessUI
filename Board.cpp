@@ -30,7 +30,7 @@ void Board::generateBoard()
     m_squares.clear();
 
     // generate new board
-    for (int row = 0; row < 8; ++row)
+    for (int row = 7; row >= 0; --row)
     {
         for (int col = 0; col < 8; ++col)
         {
