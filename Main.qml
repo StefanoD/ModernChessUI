@@ -40,15 +40,16 @@ Window {
                             width: board.squareSize
                             height: width
 
+                            property int row: Math.floor(index/8);
+                            property int col: index % 8;
+
                             required property int index
                             required property string square
 
                             Rectangle {
-                                property int row: Math.floor(index/8);
-                                property int col: index % 8;
-                                height: board.squareSize
-                                width: board.squareSize
+                                anchors.fill: parent
                                 color: board.colorArray[(row+1+col) % 2]
+
                                 Text {
                                     id: field
                                     text: square
@@ -71,7 +72,8 @@ Window {
                         anchors.fill: parent
                         model: _board.squares
 
-                        delegate: MouseArea {
+                        delegate: Item {
+                            id: tile
                             required property int index
                             required property string square
                             required property string imageSource
@@ -82,20 +84,41 @@ Window {
                             property int row: Math.floor(index/8);
                             property int col: index % 8;
 
-                            Drag.active: drag.active
-                            Drag.hotSpot.x: width / 2
-                            Drag.hotSpot.y: height / 2
-                            drag.target: figurePlaceholder
-                            Item {
-                                id: figurePlaceholder
 
+                            //drag.target: figurePlaceholder
+                            //enabled: figurePlaceholder.imageSource !== ""
+
+                            Image {
+                                id: figurePlaceholder
+                                source: imageSource
+                                antialiasing: true
                                 anchors.fill: parent
-                                Image {
-                                    source: imageSource
-                                    antialiasing: true
-                                    anchors.fill: parent
-                                    anchors.margins: parent.width * 0.025
+                                anchors.margins: parent.width * 0.025
+                                //anchors.verticalCenter: parent.verticalCenter
+                                //anchors.horizontalCenter: parent.horizontalCenter
+                                //horizontalAlignment: Image.AlignHCenter
+                                //verticalAlignment: Image.AlignVCenter
+                                anchors.centerIn: parent
+
+                                Drag.active: mouseArea.drag.active
+                                Drag.hotSpot.x: width / 2
+                                Drag.hotSpot.y: height / 2
+
+                                MouseArea {
+                                    id: mouseArea
+                                    anchors.fill: figurePlaceholder
+                                    drag.target: tile
+                                    onPressed: console.log("Pressed:" + index)
+                                    onReleased: {
+                                        parent = (tile.Drag.target !== null) ? tile.Drag.target : tile
+                                    }
                                 }
+
+                                /*states: State {
+                                    when: mouseArea.drag.active
+                                    ParentChange { target: tile; parent: tile }
+                                    AnchorChanges { target: tile; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
+                                }*/
                             }
                         }
                     }
